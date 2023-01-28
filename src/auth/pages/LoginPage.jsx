@@ -1,31 +1,87 @@
+import { useMemo } from "react";
 // Importamos el link como router link para no tener conflictos con el link de MUI
+import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-
+import { Alert, Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
-import { Button, Grid, Link, TextField, Typography } from "@mui/material";
+
 import { AuthLayout } from "../layout/AuthLayout";
+import { useForm } from "../../hooks";
+import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 
 export const LoginPage = () => {
+  // Tomamos el estado del useSelector
+  const { status, errorMessage } = useSelector((state) => state.auth);
+
+  // Buscamos el despachador
+  const dispatch = useDispatch();
+
+  // Vemos si se esta autenticando y guardamos con un useMemo que solo cambiara si cambia el status y no cada vez que el componente se renderiza
+  const isAuthenticating = useMemo(() => status === "checking", [status]);
+
+  // Cremaos el formato del form usando nuestro hook personalizado
+  const { email, password, onInputChange, formState } = useForm({
+    email: "",
+    password: "",
+  });
+
+  // creamos la función del formulario
+  const onSubmit = (event) => {
+    event.preventDefault();
+    // console.log( formState )
+
+    dispatch(startLoginWithEmailPassword(formState));
+
+    // console.log({ email, password });
+    // NO es esta la acción a despachar
+    // dispatch(checkingAthentication());
+  };
+
+  // Creamos el googleSignin
+  const onGoogleSignIn = () => {
+    console.log("On Google Sign In");
+    dispatch(startGoogleSignIn());
+  };
+
   return (
     <AuthLayout title="Login">
-      <form>
+      <form onSubmit={onSubmit} className="animate__animated animate__fadeIn">
         <Grid container>
           <Grid item xs={12} sx={{ mt: 2 }}>
-            <TextField label="Correo" type="email" placeholder="correo@google.com" fullWidth></TextField>
+            <TextField
+              label="Correo"
+              type="email"
+              placeholder="correo@google.com"
+              fullWidth
+              name="email"
+              value={email}
+              onChange={onInputChange}
+            />
           </Grid>
 
           <Grid item xs={12} sx={{ mt: 2 }}>
-            <TextField label="Contraseña" type="password" placeholder="Contraseña" fullWidth></TextField>
+            <TextField
+              label="Contraseña"
+              type="password"
+              placeholder="Contraseña"
+              fullWidth
+              name="password"
+              value={password}
+              onChange={onInputChange}
+            />
           </Grid>
 
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+            <Grid item xs={12} display={!!errorMessage ? "" : "none"}>
+              <Alert severity="error">{errorMessage}</Alert>
+            </Grid>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth>
+              <Button variant="contained" fullWidth type="submit" disabled={isAuthenticating}>
                 Login
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth>
+              <Button variant="contained" fullWidth onClick={onGoogleSignIn} disabled={isAuthenticating}>
                 <Google />
                 <Typography sx={{ ml: 1 }}>Google</Typography>
               </Button>

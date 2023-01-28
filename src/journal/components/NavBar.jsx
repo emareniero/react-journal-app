@@ -1,7 +1,19 @@
 import { LogoutOutlined, MenuOutlined } from "@mui/icons-material";
 import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { startLogout } from "../../store/auth";
 
 export const NavBar = ({ drawerWidth = 240 }) => {
+
+  // usamos el dispach para hacer el log out
+  const dispach = useDispatch();
+
+  // Desconectamos el usuario de firebase
+  const onLogout = () => {
+    console.log("onLogout");
+    dispach(startLogout());
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -15,14 +27,16 @@ export const NavBar = ({ drawerWidth = 240 }) => {
           <MenuOutlined></MenuOutlined>
         </IconButton>
 
-        <Grid container direction='row' justifyContent='space-between' alignItems='center' >
-            <Typography variant="h6" noWrap component='div' > Journal App </Typography>
+        <Grid container direction="row" justifyContent="space-between" alignItems="center">
+          <Typography variant="h6" noWrap component="div">
+            {" "}
+            Journal App{" "}
+          </Typography>
 
-            <IconButton color="error">
-                <LogoutOutlined></LogoutOutlined>
-            </IconButton>
+          <IconButton color="error" onClick={onLogout}>
+            <LogoutOutlined></LogoutOutlined>
+          </IconButton>
         </Grid>
-
       </Toolbar>
     </AppBar>
   );

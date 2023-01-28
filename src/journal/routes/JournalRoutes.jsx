@@ -5,10 +5,10 @@ export const JournalRoutes = () => {
   return (
     <Routes>
         {/* Esta es la página del journal */}
-        <Route path="/" element={ <JournalPage /> } ></Route>
+        <Route path="/" element={ <JournalPage /> } />
 
         {/* Cualquier otra ruta me tira al jouernal */}
-        <Route path="/*" element={ <Navigate to='/journal/' /> } />
+        <Route path="/*" element={ <Navigate to='/' /> } />
     </Routes>
   )
 }
