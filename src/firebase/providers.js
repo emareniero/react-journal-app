@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -35,16 +34,14 @@ export const signInWithGoogle = async () => {
     // const credentials = GoogleAuthProvider.credentialFromResult( result );
     // console.log( credentials )
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     // Handle Errors here.
-    const errorCode = error.code;
     const errorMessage = error.message;
 
     return {
       ok: false,
       errorMessage,
-      errorCode,
     };
   }
 };
@@ -55,7 +52,7 @@ export const registerUserWithEmailPassword = async ({ email, password, displayNa
   try {
     // Intentamos hacer la creación de un usuario usando los metodos de firebase
     const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
-    console.log(resp);
+    // console.log(resp);
     const { uid, photoURL } = resp.user;
 
     // TODO: Actualizar el displayName en Firebase
@@ -65,7 +62,9 @@ export const registerUserWithEmailPassword = async ({ email, password, displayNa
     return {
       ok: true,
       uid,
-      photoURL
+      photoURL,
+      email,
+      displayName,
     };
   } catch (error) {
     // Avisamos si algo sale mal
@@ -79,23 +78,21 @@ export const loginWithEmailPassword = async ({ email, password }) => {
   // Vamos a usar un try catch por si algo sale mal
   try {
     // Vamos a llamar al método propio de firebase para logearse
-    const {uid, photoURL, displayName} = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+    const resp = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+    const { uid, photoURL, displayName } = resp.user;
     // console.log(resp);
 
     // Si todo sale vbien mandamos un ok
-    return { ok: true, uid, displayName, photoURL };
-
+    return { ok: true, uid, photoURL, displayName };
   } catch (error) {
     // Si por algun motivo no se puedo loggear vemos que ha pasado
     // console.log( error )
-    return { ok: false, errorMessage: error.message}
+    return { ok: false, errorMessage: error.message };
   }
 };
 
 // Función para cerrar la cuenta
-export const logoutFirebase = async() => {
-
+export const logoutFirebase = async () => {
   // Esto cierra todo, google, correo, etc.
   return await FirebaseAuth.signOut();
-
-}
+};

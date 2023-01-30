@@ -1,13 +1,18 @@
-import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
-import { TurnedInNot } from "@mui/icons-material";
+import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import { SidebarItem } from "./";
 
 export const Sidebar = ({ drawerWidth = 240 }) => {
   // usamos el useSelectro para mandaer el nombre del usuario que vien del state
   const { displayName } = useSelector((state) => state.auth);
+  // Tomamos las notas del state
+  const { notes } = useSelector((state) => state.journal);
 
   return (
-    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+    <Box 
+      component="nav" 
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+        
       <Drawer
         variant="permanent" // Temporary
         open
@@ -24,18 +29,8 @@ export const Sidebar = ({ drawerWidth = 240 }) => {
         <Divider />
 
         <List>
-          {["enero", "febrero", "marzo", "abril", "mayo"].map((text) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <TurnedInNot />
-                </ListItemIcon>
-                <Grid container>
-                  <ListItemText primary={text} />
-                  <ListItemText secondary={"Cillum sit consectetur ipsum."} />
-                </Grid>
-              </ListItemButton>
-            </ListItem>
+          { notes.map((note) => (
+           < SidebarItem key={note.id} { ...note } />
           ))}
         </List>
       </Drawer>

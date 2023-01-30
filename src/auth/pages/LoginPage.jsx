@@ -9,6 +9,12 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
 import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 
+
+const formData = {
+  email: "",
+  password: "",
+}
+
 export const LoginPage = () => {
   // Tomamos el estado del useSelector
   const { status, errorMessage } = useSelector((state) => state.auth);
@@ -16,21 +22,19 @@ export const LoginPage = () => {
   // Buscamos el despachador
   const dispatch = useDispatch();
 
+  // Cremaos el formato del form usando nuestro hook personalizado
+  const { email, password, onInputChange, formState } = useForm( formData );
+
   // Vemos si se esta autenticando y guardamos con un useMemo que solo cambiara si cambia el status y no cada vez que el componente se renderiza
   const isAuthenticating = useMemo(() => status === "checking", [status]);
 
-  // Cremaos el formato del form usando nuestro hook personalizado
-  const { email, password, onInputChange, formState } = useForm({
-    email: "",
-    password: "",
-  });
 
   // creamos la función del formulario
   const onSubmit = (event) => {
     event.preventDefault();
     // console.log( formState )
 
-    dispatch(startLoginWithEmailPassword(formState));
+    dispatch(startLoginWithEmailPassword({ email, password }));
 
     // console.log({ email, password });
     // NO es esta la acción a despachar

@@ -8,7 +8,7 @@ import { useCheckAuth } from "../hooks";
 export const AppRouter = () => {
  
   // usamos un custom hooo para evluar el estado del usuario
-  const { status } = useCheckAuth(); 
+  const status = useCheckAuth(); 
 
   // Chequemaos si esta alguien loggeado
   if (status === "checking") {

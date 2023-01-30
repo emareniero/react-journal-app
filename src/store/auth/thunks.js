@@ -1,8 +1,8 @@
-import { async } from "@firebase/util";
 import { loginWithEmailPassword, logoutFirebase, registerUserWithEmailPassword, signInWithGoogle } from "../../firebase/providers";
+import { clearNotesLogout } from "../journal";
 import { checkingCredentials, login, logout } from "./";
 
-export const checkingAthentication = (email, Password) => {
+export const checkingAthentication = () => {
   return async (dispatch) => {
     // Mandamos a avisar que se esta verificando el usuario
     dispatch(checkingCredentials());
@@ -61,12 +61,15 @@ export const startLoginWithEmailPassword = ({ email, password }) => {
   };
 };
 
-export const startLogout = () => {
+export const  startLogout = () => {
   return async (dispatch) => {
     // Llamamos la acción de cerrar sesion de firebase
     await logoutFirebase();
 
+    // Limpiamos las notas
+    dispatch( clearNotesLogout() )
+
     // Mandmaos el logout
-    dispatch( logout( {  } ) );
+    dispatch( logout(  ) );
   };
 };

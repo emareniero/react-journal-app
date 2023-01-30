@@ -10,7 +10,7 @@ export const NavBar = ({ drawerWidth = 240 }) => {
 
   // Desconectamos el usuario de firebase
   const onLogout = () => {
-    console.log("onLogout");
+    // console.log("onLogout");
     dispach(startLogout());
   };
 
@@ -24,7 +24,7 @@ export const NavBar = ({ drawerWidth = 240 }) => {
     >
       <Toolbar>
         <IconButton color="inherit" edge="start" sx={{ mr: 2, display: { sm: "none" } }}>
-          <MenuOutlined></MenuOutlined>
+          <MenuOutlined/>
         </IconButton>
 
         <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -34,7 +34,7 @@ export const NavBar = ({ drawerWidth = 240 }) => {
           </Typography>
 
           <IconButton color="error" onClick={onLogout}>
-            <LogoutOutlined></LogoutOutlined>
+            <LogoutOutlined/>
           </IconButton>
         </Grid>
       </Toolbar>

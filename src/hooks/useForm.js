@@ -9,6 +9,12 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     createValidators();
   }, [formState]);
 
+  // Creamos un useEffect para actualizar el formulario cuando una nota cmabia
+  useEffect(() => {
+    // Mandamos el nuevo initial form
+    setFormState(initialForm);
+  }, [initialForm]);
+
   // Creamos el metodo para determinar si el formulario es válido y usamos el useMemo porque no queremos vovler a renderizar si no corresponde
   const isFormValid = useMemo(() => {
     // Usamor for of para evaluar cada uno de los campos del formValidation
@@ -18,7 +24,6 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     }
     // Si son nulas es porque no hya error y devolvemos true como que esta todo okey
     return true;
-
   }, [formValidation]);
 
   const onInputChange = ({ target }) => {
