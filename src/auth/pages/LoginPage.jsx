@@ -9,11 +9,10 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
 import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 
-
 const formData = {
   email: "",
   password: "",
-}
+};
 
 export const LoginPage = () => {
   // Tomamos el estado del useSelector
@@ -23,11 +22,10 @@ export const LoginPage = () => {
   const dispatch = useDispatch();
 
   // Cremaos el formato del form usando nuestro hook personalizado
-  const { email, password, onInputChange, formState } = useForm( formData );
+  const { email, password, onInputChange, formState } = useForm(formData);
 
   // Vemos si se esta autenticando y guardamos con un useMemo que solo cambiara si cambia el status y no cada vez que el componente se renderiza
   const isAuthenticating = useMemo(() => status === "checking", [status]);
-
 
   // creamos la función del formulario
   const onSubmit = (event) => {
@@ -43,13 +41,13 @@ export const LoginPage = () => {
 
   // Creamos el googleSignin
   const onGoogleSignIn = () => {
-    console.log("On Google Sign In");
+    // console.log("On Google Sign In");
     dispatch(startGoogleSignIn());
   };
 
   return (
     <AuthLayout title="Login">
-      <form onSubmit={onSubmit} className="animate__animated animate__fadeIn">
+      <form aria-label="submit-form" onSubmit={onSubmit} className="animate__animated animate__fadeIn">
         <Grid container>
           <Grid item xs={12} sx={{ mt: 2 }}>
             <TextField
@@ -70,6 +68,10 @@ export const LoginPage = () => {
               placeholder="Contraseña"
               fullWidth
               name="password"
+              inputProps={{
+                // Esto se usa para testing
+                "data-testid": "password",
+              }}
               value={password}
               onChange={onInputChange}
             />
@@ -85,7 +87,7 @@ export const LoginPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth onClick={onGoogleSignIn} disabled={isAuthenticating}>
+              <Button aria-label="google-btn" variant="contained" fullWidth onClick={onGoogleSignIn} disabled={isAuthenticating}>
                 <Google />
                 <Typography sx={{ ml: 1 }}>Google</Typography>
               </Button>
